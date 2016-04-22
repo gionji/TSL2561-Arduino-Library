@@ -34,8 +34,6 @@
 */
 /**************************************************************************/
 
-#include <avr/pgmspace.h>
-#include <util/delay.h>
 #include <stdlib.h>
 
 #include "TSL2561.h"
@@ -50,21 +48,21 @@ TSL2561::TSL2561(uint8_t addr) {
 }
 
 boolean TSL2561::begin(void) {
-  Wire.begin();
+  Wire1.begin();
 
  // Initialise I2C
-  Wire.beginTransmission(_addr);
+  Wire1.beginTransmission(_addr);
 #if ARDUINO >= 100
-  Wire.write(TSL2561_REGISTER_ID);
+  Wire1.write(TSL2561_REGISTER_ID);
 #else
-  Wire.send(TSL2561_REGISTER_ID);
+  Wire1.send(TSL2561_REGISTER_ID);
 #endif
-  Wire.endTransmission();
-  Wire.requestFrom(_addr, 1);
+  Wire1.endTransmission();
+  Wire1.requestFrom(_addr, 1);
 #if ARDUINO >= 100
-  int x = Wire.read();
+  int x = Wire1.read();
 #else
-  int x = Wire.receive();
+  int x = Wire1.receive();
 #endif
   //Serial.print("0x"); Serial.println(x, HEX);
   if (x & 0x0A ) {
@@ -260,21 +258,21 @@ uint16_t TSL2561::read16(uint8_t reg)
 {
   uint16_t x; uint16_t t;
 
-  Wire.beginTransmission(_addr);
+  Wire1.beginTransmission(_addr);
 #if ARDUINO >= 100
-  Wire.write(reg);
+  Wire1.write(reg);
 #else
-  Wire.send(reg);
+  Wire1.send(reg);
 #endif
-  Wire.endTransmission();
+  Wire1.endTransmission();
 
-  Wire.requestFrom(_addr, 2);
+  Wire1.requestFrom(_addr, 2);
 #if ARDUINO >= 100
-  t = Wire.read();
-  x = Wire.read();
+  t = Wire1.read();
+  x = Wire1.read();
 #else
-  t = Wire.receive();
-  x = Wire.receive();
+  t = Wire1.receive();
+  x = Wire1.receive();
 #endif
   x <<= 8;
   x |= t;
@@ -285,13 +283,13 @@ uint16_t TSL2561::read16(uint8_t reg)
 
 void TSL2561::write8 (uint8_t reg, uint8_t value)
 {
-  Wire.beginTransmission(_addr);
+  Wire1.beginTransmission(_addr);
 #if ARDUINO >= 100
-  Wire.write(reg);
-  Wire.write(value);
+  Wire1.write(reg);
+  Wire1.write(value);
 #else
-  Wire.send(reg);
-  Wire.send(value);
+  Wire1.send(reg);
+  Wire1.send(value);
 #endif
-  Wire.endTransmission();
+  Wire1.endTransmission();
 }
